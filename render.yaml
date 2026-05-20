@@ -1,0 +1,178 @@
+# Render Blueprint for the Date Range Validator review shell and MCP server.
+services:
+  - type: web
+    name: date-range-validator
+    runtime: python
+    plan: free
+    # Installs the FastAPI runtime used by server.py.
+    buildCommand: pip install -r requirements.txt
+    # Starts the FastAPI app on Render, binding to 0.0.0.0 and reading the Render PORT value.
+    startCommand: python server.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: OPENAI_APPS_CHALLENGE
+        sync: false
+      - key: INDEX_HTML
+        value: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Date Range Validator</title>
+            <style>
+              body {
+                margin: 0;
+                font-family: Georgia, "Times New Roman", serif;
+                background: linear-gradient(180deg, #f7f0e8 0%, #fffaf5 100%);
+                color: #1f2933;
+              }
+              main {
+                max-width: 760px;
+                margin: 0 auto;
+                padding: 48px 24px 64px;
+              }
+              h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+              }
+              p, li {
+                font-size: 1.05rem;
+                line-height: 1.7;
+              }
+              .panel {
+                background: rgba(255, 255, 255, 0.8);
+                border: 1px solid #d8c8b8;
+                border-radius: 16px;
+                padding: 24px;
+                margin-top: 24px;
+                box-shadow: 0 10px 30px rgba(95, 74, 52, 0.08);
+              }
+              a {
+                color: #8a3b12;
+              }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Date Range Validator</h1>
+              <p>Validate whether a start date and end date form a valid ISO date range.</p>
+              <section class="panel">
+                <h2>What problem this solves</h2>
+                <p>This app gives developers and reviewers a deterministic MCP tool for checking date-range inputs without ambiguity, side effects, or external dependencies.</p>
+              </section>
+              <section class="panel">
+                <h2>Basic usage</h2>
+                <ol>
+                  <li>Connect to the MCP endpoint at <code>/mcp</code>.</li>
+                  <li>Call <code>initialize</code>, then <code>tools/list</code>.</li>
+                  <li>Select <code>validate_date_range</code> and pass <code>start_date</code> and <code>end_date</code> in <code>YYYY-MM-DD</code> format.</li>
+                </ol>
+              </section>
+              <section class="panel">
+                <h2>Support</h2>
+                <p>Email: <a href="mailto:sidcraigau@gmail.com">sidcraigau@gmail.com</a></p>
+                <p>Review pages: <a href="/privacy">Privacy</a> | <a href="/terms">Terms</a> | <a href="/support">Support</a></p>
+              </section>
+            </main>
+          </body>
+          </html>
+      - key: PRIVACY_HTML
+        value: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Privacy | Date Range Validator</title>
+            <style>
+              body { font-family: Georgia, "Times New Roman", serif; margin: 0; background: #fcfaf7; color: #1f2933; }
+              main { max-width: 820px; margin: 0 auto; padding: 40px 24px 64px; }
+              h1, h2 { color: #4b2e1f; }
+              p { line-height: 1.75; }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Privacy Policy</h1>
+              <p>Last updated: 2026-05-20</p>
+              <h2>Data handling</h2>
+              <p>Date Range Validator processes only the date values that are submitted to the MCP tool for validation.</p>
+              <h2>Data sources</h2>
+              <p>All inputs come directly from the calling client. The service does not enrich, scrape, or fetch outside data sources.</p>
+              <h2>How data is used</h2>
+              <p>Submitted values are used only to determine whether the date range is valid and to return a structured validation result.</p>
+              <h2>Storage</h2>
+              <p>This service is designed to be stateless and does not intentionally store submitted inputs after request processing completes, aside from transient platform-level request handling and logs.</p>
+              <h2>Sharing</h2>
+              <p>The service does not intentionally share submitted data with third parties except where infrastructure providers necessarily process requests to host the service.</p>
+              <h2>Contact methods</h2>
+              <p>Privacy questions or deletion requests can be sent to <a href="mailto:sidcraigau@gmail.com">sidcraigau@gmail.com</a>.</p>
+            </main>
+          </body>
+          </html>
+      - key: TERMS_HTML
+        value: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Terms | Date Range Validator</title>
+            <style>
+              body { font-family: Georgia, "Times New Roman", serif; margin: 0; background: #fffdf9; color: #1d2730; }
+              main { max-width: 820px; margin: 0 auto; padding: 40px 24px 64px; }
+              h1, h2 { color: #4b2e1f; }
+              p { line-height: 1.75; }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Terms of Service</h1>
+              <p>Effective date: 2026-05-20</p>
+              <h2>Service content</h2>
+              <p>Date Range Validator provides a single MCP tool that validates ISO 8601 date ranges and returns structured output.</p>
+              <h2>Usage boundaries</h2>
+              <p>The service validates only <code>YYYY-MM-DD</code> calendar dates. This service is not professional advice and does not provide scheduling, legal, financial, medical, tax, or other professional advice.</p>
+              <h2>User responsibilities</h2>
+              <p>Users are responsible for supplying accurate inputs, reviewing outputs, and determining whether the results fit their own workflows and compliance needs.</p>
+              <h2>Prohibited usage</h2>
+              <p>You may not use the service to attempt unauthorized access, overload the service, submit malicious payloads, or misrepresent the output as professional advice.</p>
+              <h2>Change notifications</h2>
+              <p>Material updates to these terms will be reflected on this page by updating the effective date and page content.</p>
+              <h2>Contact info</h2>
+              <p>Questions about these terms can be sent to <a href="mailto:sidcraigau@gmail.com">sidcraigau@gmail.com</a>.</p>
+            </main>
+          </body>
+          </html>
+      - key: SUPPORT_HTML
+        value: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Support | Date Range Validator</title>
+            <style>
+              body { font-family: Georgia, "Times New Roman", serif; margin: 0; background: #fbf7f2; color: #22303c; }
+              main { max-width: 820px; margin: 0 auto; padding: 40px 24px 64px; }
+              h1, h2 { color: #4b2e1f; }
+              p, li { line-height: 1.75; }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Date Range Validator Support</h1>
+              <p>Support email: <a href="mailto:sidcraigau@gmail.com">sidcraigau@gmail.com</a></p>
+              <h2>Feedback types</h2>
+              <ul>
+                <li>Bug reports for incorrect validation behavior or page issues</li>
+                <li>Deployment and connection questions related to the MCP endpoint</li>
+                <li>Submission-review feedback for privacy, terms, or support content</li>
+              </ul>
+              <h2>Exception handling instructions</h2>
+              <p>If the tool returns an error result, include the exact input payload, returned error code, and the time of the request in your support message so the issue can be reproduced safely.</p>
+            </main>
+          </body>
+          </html>
